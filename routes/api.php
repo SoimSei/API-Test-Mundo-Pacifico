@@ -25,7 +25,7 @@ Route::get('regiones/{id}', 'RegionController@getById');
 //ROUTES DE PROVINCIA
 Route::get('provincias', 'ProvinciaController@getAll');
 Route::get('provincias/{id}', 'ProvinciaController@getById');
-Route::get('region/provincias/{id}', 'ProvinciaController@getAllByRegionId');
+Route::get('regiones/provincias/{id}', 'ProvinciaController@getAllByRegionId');
 
 //ROUTES DE CIUDAD
 Route::get('ciudades', 'CiudadController@getAll');
@@ -39,5 +39,11 @@ Route::get('ciudades/calles/{id}', 'CalleController@getAllByCiudadId');
 
 Route::post('calles', 'CalleController@store');
 Route::put('calles/{id}', 'CalleController@update');
+Route::delete('calles/{id}', 'CalleController@delete');
 
 Route::get('datosCalle/{id}', 'CalleController@getAllDatosCalleById');
+
+Route::get('datosCalle', 'CalleController@getAllDatosCalle');
+
+Route::get('datosCalleLista', 'CalleController@getAllDatosCalleLista');
+Route::get('datosCalleLista/{id}', 'CalleController@getAllDatosCalleListaById');

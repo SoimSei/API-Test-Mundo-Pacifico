@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Calles;
-use App\Http\Controllers\CiudadController;
-use App\Http\Controllers\ProvinciaController;
-use App\Http\Controllers\RegionController;
-
-
+use App\Models\Ciudades;
+use App\Models\Provincias;
+use App\Models\Regiones;
 
 class CalleController extends Controller
 {
@@ -41,21 +39,23 @@ class CalleController extends Controller
             "message" => "Calle modificada exitosamente"
         ], 201);
     }
+    public function delete($id)
+    {
+        Calles::findOrFail($id)->delete();
+        return response()->json([
+            "message" => "Calle eliminada exitosamente"
+        ], 204);
+    }
     public function getAllByCiudadId($id)
     {
         return Calles::all()->where('idCiudad', '=', $id);
     }
     public function getAllDatosCalleById($id)
     {
-        $calle = new CalleController();
-        $ciudad = new CiudadController();
-        $provincia = new ProvinciaController();
-        $region = new RegionController();
-
-        $calle = $calle->getById($id);
-        $ciudad = $ciudad->getById($calle['idCiudad']);
-        $provincia = $provincia->getById($ciudad['idProvincia']);
-        $region = $region->getById($provincia['idRegion']);
+        $calle = Calles::find($id);
+        $ciudad = Ciudades::find($calle['idCiudad']);
+        $provincia = Provincias::find($ciudad['idProvincia']);
+        $region = Regiones::find($provincia['idRegion']);
 
         $datos = new \stdClass();
 
@@ -70,6 +70,64 @@ class CalleController extends Controller
         $datos->nombreProvincia = $provincia['nombreProvincia'];
         $datos->nombreRegion = $region['nombreRegion'];
         */
+
+        return $datos;
+    }
+    public function getAllDatosCalle()
+    {
+        $calles = Calles::all();
+        $datos = [];
+        foreach ($calles as $key => $calle) {
+            $ciudad = Ciudades::find($calle['idCiudad']);
+            $provincia = Provincias::find($ciudad['idProvincia']);
+            $region = Regiones::find($provincia['idRegion']);
+
+            $datos[$key] = ['calle' => $calle, 'ciudad' => $ciudad, 'provincia' => $provincia, 'region' => $region];
+        }
+
+        return $datos;
+    }
+    public function getAllDatosCalleLista()
+    {
+        $calles = Calles::all();
+        $datos = [];
+        foreach ($calles as $key => $calle) {
+            $ciudad = Ciudades::find($calle['idCiudad']);
+            $provincia = Provincias::find($ciudad['idProvincia']);
+            $region = Regiones::find($provincia['idRegion']);
+
+            $datos[$key] = [
+                'calle' => $calle['nombreCalle'],
+                'idCalle' => $calle['id'],
+                'ciudad' => $ciudad['nombreCiudad'],
+                'idCiudad' => $ciudad['id'],
+                'provincia' => $provincia['nombreProvincia'],
+                'idProvincia' => $provincia['id'],
+                'region' => $region['nombreRegion'],
+                'idRegion' => $region['id'],
+            ];
+        }
+
+        return $datos;
+    }
+    public function getAllDatosCalleListaById($id)
+    {
+        $calle = Calles::find($id);
+        $datos = [];
+        $ciudad = Ciudades::find($calle['idCiudad']);
+        $provincia = Provincias::find($ciudad['idProvincia']);
+        $region = Regiones::find($provincia['idRegion']);
+
+        $datos = [
+            'calle' => $calle['nombreCalle'],
+            'idCalle' => $calle['id'],
+            'ciudad' => $ciudad['nombreCiudad'],
+            'idCiudad' => $ciudad['id'],
+            'provincia' => $provincia['nombreProvincia'],
+            'idProvincia' => $provincia['id'],
+            'region' => $region['nombreRegion'],
+            'idRegion' => $region['id'],
+        ];
 
         return $datos;
     }
