@@ -13,6 +13,12 @@
 #### Luego se abre la conexión y se crea una base de datos con un nombre a elegir
 
 #### Luego se debe abrir la terminal de Laragon y escribir:
+```
+    composer install
+```
+#### Esto instala las dependencias necesarias para correr la API
+
+#### Luego en la misma consola se ejecuta:
 
 ```
     cp .env.example .env
@@ -32,6 +38,23 @@ DB_DATABASE=nombreBaseDeDatos
 DB_USERNAME=root
 DB_PASSWORD=
 ```
+
+#### Finalmente en la terminal se deben ejecutar los migrations y seeders con el comando:
+
+```
+    php artisan migrate:fresh
+```
+
+```
+    php artisan db:seed
+```
+
+#### Luego de todo la API estaría funcionando en el url (definido por el nombre de proyecto y laragon): 
+
+```
+http://api-test-mundo-pacifico.test
+```
+
 
 ## Montar sin Laragon
 
